@@ -38,23 +38,20 @@ func (user *User) Save() *errors.RestErr {
 	stmt, err := users_db.Client.Prepare(queryInsertUser)
 
 	if err != nil {
-		return errors.NewInternalServerError(fmt.Sprintf("error when trying to save user:"))
-		//return errors.NewInternalServerError(fmt.Sprintf("error when trying to save user: %s", err.Error()))
+		return errors.NewInternalServerError(fmt.Sprintf("error when trying to save user: %s", err.Error()))
 	}
 	defer stmt.Close()
 
 	insertResult, err := stmt.Exec(user.FirstName, user.LastName, user.Email, user.DateCreated)
 
 	if err != nil {
-		return errors.NewInternalServerError(fmt.Sprintf("error when trying to save user:"))
-		//return errors.NewInternalServerError(fmt.Sprintf("error when trying to save user: %s", err.Error()))
+		return errors.NewInternalServerError(fmt.Sprintf("error when trying to save user: %s", err.Error()))
 	}
 
 	userId, err := insertResult.LastInsertId()
 
 	if err != nil {
-		return errors.NewInternalServerError(fmt.Sprintf("error when trying to save user:"))
-		//return errors.NewInternalServerError(fmt.Sprintf("error when trying to save user: %s", err.Error()))
+		return errors.NewInternalServerError(fmt.Sprintf("error when trying to save user: %s", err.Error()))
 	}
 
 	user.Id = userId
