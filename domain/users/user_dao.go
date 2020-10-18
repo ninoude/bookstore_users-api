@@ -2,13 +2,17 @@ package users
 
 import (
 	"fmt"
-	"github.com/ninoude/bookstore_users-api/utils/date_utils"
+	_ "github.com/ninoude/bookstore_users-api/utils/date_utils"
 	"github.com/ninoude/bookstore_users-api/utils/errors"
 	"github.com/ninoude/bookstore_users-api/datasources/mysql/users_db"
 )
 
 var (
 	usersDB = make(map[int64]*User)
+)
+
+const (
+	queryInsertUser = "INSERT INTO users(first_name, last_name, email, date_created) VALUES(?, ?, ?, ?);"
 )
 
 func (user User) Get() *errors.RestErr {
@@ -31,16 +35,24 @@ func (user User) Get() *errors.RestErr {
 }
 
 func (user *User) Save() *errors.RestErr {
-	current := usersDB[user.Id]
-	if current != nil {
-		if current.Email == user.Email {
-			return errors.NewBadRequestError(fmt.Sprintf("email %s already registerd", user.Email))
-		}
-		return errors.NewBadRequestError(fmt.Sprintf("user %d already exists", user.Id))
+	stmt, err := users_db.Client.Prepare(queryInsertUser)
+	if err != nil {
+		return errors.NewInternalServerError(fmt.Sprintf("error when trying to save user: %s", err.Error() ))
+	}
+	defer stmt.Close()
+
+
+	insertResult, err := stmt.Exec(user.FirstName, user.LastName, user.Email, user.DateCreated)
+	if err != nil {
+		return errors.NewInternalServerError(fmt.Sprintf("error when trying to save user: %s", err.Error() ))
 	}
 
-	user.DateCreated = date_utils.GetNowString()
+	userId, err := insertResult.LastInsertId()
+	if err != nil {
+		return errors.NewInternalServerError(fmt.Sprintf("error when trying to save user: %s", err.Error() ))
+	}
 
-	usersDB[user.Id] = user
+	user.Id=userId
+
 	return nil
 }
