@@ -5,7 +5,7 @@ import(
 	"fmt"
 	"log"
 	"os"
-	_ "github.com/go-sql-driver/mysql"
+	_"github.com/go-sql-driver/mysql"
 )
 
 const(
@@ -17,6 +17,7 @@ const(
 
 var(
 	Client *sql.DB
+
 	username = os.Getenv(mysql_users_username)
 	password = os.Getenv(mysql_users_password)
 	host     = os.Getenv(mysql_users_host)
@@ -26,14 +27,11 @@ var(
 func init() {
 	dataSourceName := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8",
 		username, password, host, schema,
-//		"root",
-//		"Passw0rd!",
-//		"mysql-svc:3306",
-//		"users_db",
 	)
 
 	var err error
-	Client, err := sql.Open("mysql", dataSourceName)
+	Client, err = sql.Open("mysql", dataSourceName)
+
 	if err != nil {
 		panic(err)
 	}
