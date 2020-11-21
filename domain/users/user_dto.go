@@ -3,6 +3,7 @@ package users
 
 import (
 	"strings"
+
 	"github.com/ninoude/bookstore_users-api/utils/errors"
 )
 
@@ -16,11 +17,12 @@ type User struct {
 	LastName    string `json:"last_name"`
 	Email       string `json:"email"`
 	DateCreated string `json:"date_created"`
-	Status		string `json:status`
-	Password	string `json:"password"`
+	Status      string `json:status`
+	Password    string `json:"password"`
 }
 
-// method
+type Users []User
+
 func (user *User) Validate() *errors.RestErr {
 	user.FirstName = strings.TrimSpace(user.FirstName)
 	user.LastName = strings.TrimSpace(user.LastName)
@@ -32,7 +34,6 @@ func (user *User) Validate() *errors.RestErr {
 	if user.Password == "" {
 		return errors.NewBadRequestError("invalid password")
 	}
-
 
 	return nil
 }
