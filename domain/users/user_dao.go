@@ -2,6 +2,7 @@ package users
 
 import (
 	"fmt"
+
 	"github.com/ninoude/bookstore_users-api/datasources/mysql/users_db"
 	"github.com/ninoude/bookstore_users-api/utils/errors"
 	"github.com/ninoude/bookstore_users-api/utils/mysql_utils"
@@ -12,10 +13,10 @@ var (
 )
 
 const (
-	queryInsertUser 	  = "INSERT INTO users(first_name, last_name, email, date_created, status, password) VALUES(?, ?, ?, ?, ?, ?);"
-	queryGetUser    	  = "SELECT id, first_name, last_name, email, date_created, status FROM users WHERE id=?;"
-	queryUpdateUser 	  = "UPDATE users SET first_name=?, last_name=?, email=? WHERE id=?;"
-	queryDeleteUser 	  = "DELETE FROM users WHERE id=?;"
+	queryInsertUser       = "INSERT INTO users(first_name, last_name, email, date_created, status, password) VALUES(?, ?, ?, ?, ?, ?);"
+	queryGetUser          = "SELECT id, first_name, last_name, email, date_created, status FROM users WHERE id=?;"
+	queryUpdateUser       = "UPDATE users SET first_name=?, last_name=?, email=? WHERE id=?;"
+	queryDeleteUser       = "DELETE FROM users WHERE id=?;"
 	queryFindUserByStatus = "SELECT id, first_name, last_name, email, date_created, status FROM users WHERE status=?;"
 )
 
